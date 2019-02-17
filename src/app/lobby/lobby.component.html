@@ -4,6 +4,7 @@
   <button (click)="onLoginClick()" mat-button *ngIf="!isLoggedIn()">Login</button>
   <button (click)="onSignUpClick()" mat-button *ngIf="!isLoggedIn()">Sign Up</button>
   <button (click)="openCreateRoomDialog()"*ngIf="isLoggedIn()" mat-button>Create A Room</button>
+  <button (click)="onLogoutClick()"*ngIf="isLoggedIn()" mat-button>Logout</button>
 </mat-toolbar>
 
 <router-outlet></router-outlet>

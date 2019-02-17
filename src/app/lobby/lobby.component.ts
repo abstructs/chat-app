@@ -41,6 +41,10 @@ export class LobbyComponent implements OnInit {
     return this.userService.isLoggedIn();
   }
 
+  onLogoutClick(): void {
+    this.userService.logout();
+  }
+
   openCreateRoomDialog() {
     console.log("hi");
   }

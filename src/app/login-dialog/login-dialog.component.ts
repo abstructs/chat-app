@@ -16,7 +16,7 @@ export class UniqueUsernameValidator implements AsyncValidator {
       })
     );
   }
-} 
+}
 
 @Component({
   selector: 'app-login-dialog',
@@ -81,6 +81,7 @@ export class LoginDialogComponent implements OnInit {
           this.snackBar.open("Successfully logged on", "OK");
           this.dialogRef.close(true);
         } else {
+          this.loginForm.get('password').setErrors({ error: 'Invalid password' });
           this.snackBar.open("Incorrect password", "CLOSE");
         }
       });

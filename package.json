@@ -7,7 +7,8 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "server": "node ./server/index.js"
   },
   "private": true,
   "dependencies": {
@@ -22,7 +23,15 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "bcrypt": "^3.0.4",
+    "body-parser": "^1.18.3",
     "core-js": "^2.5.4",
+    "cors": "^2.8.5",
+    "dotenv": "^6.2.0",
+    "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
+    "mongod": "^2.0.0",
+    "mongoose": "^5.4.13",
     "ngx-cookie-service": "^2.1.0",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"

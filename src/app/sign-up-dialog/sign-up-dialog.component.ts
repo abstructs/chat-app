@@ -12,7 +12,7 @@ export class UniqueUsernameValidator implements AsyncValidator {
   validate(ctrl: AbstractControl): Observable<ValidationErrors | null> {
     return this.userService.usernameTaken(ctrl.value).pipe(
       map(isTaken => {
-        return isTaken ? null : { usernameTaken: false };
+        return isTaken ? { usernameTaken: true } : null;
       })
     );
   }
@@ -74,14 +74,14 @@ export class SignUpDialogComponent implements OnInit {
     this.dialogRef.close(false);
   }
 
-  onLoginClick() {
+  onSignUpClick() {
     if(this.signUpForm.valid) {
-      this.userService.authenticate(this.username.value, this.password.value).subscribe(validCreds => {
-        if(validCreds) {
-          this.snackBar.open("Successfully logged on", "OK");
+      this.userService.create(this.username.value, this.password.value).subscribe(createdUser => {
+        if(createdUser) {
+          this.snackBar.open("Welcome!", "OK");
           this.dialogRef.close(true);
         } else {
-          this.snackBar.open("Incorrect password", "CLOSE");
+          this.snackBar.open("Something went wrong!", "CLOSE");
         }
       });
     } else {

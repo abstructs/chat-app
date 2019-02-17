@@ -29,7 +29,6 @@ export class UserService {
         return true;
       }),
       catchError((err) => {
-        this.helperService.revokeToken();
         return of(false);
       })
     )
