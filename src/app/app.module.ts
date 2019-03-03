@@ -15,6 +15,7 @@ import { SignUpDialogComponent } from './sign-up-dialog/sign-up-dialog.component
 import { RoomDialogComponent } from './room-dialog/room-dialog.component';
 import { RoomService } from './services/room.service';
 import { ChatComponent } from './chat/chat.component';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { ChatComponent } from './chat/chat.component';
     BrowserAnimationsModule,
     MatSnackBarModule,
     MatCardModule,
-    MatListModule
+    MatListModule,
+    RouterModule
   ],
   providers: [UserService, CookieService, RoomService],
   bootstrap: [AppComponent],

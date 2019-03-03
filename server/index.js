@@ -4,6 +4,27 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+server.listen(3100);
+
+io.on('connection', (socket) => {
+    const roomName = socket.handshake.query.room;
+    const username = socket.handshake.query.username;
+
+    socket.join(roomName);
+
+    io.emit('somone joined', { username }).to(roomName);
+
+    socket.on('disconnect', () => {
+        io.emit('someone left', [{ username }]).to(roomName);
+    });
+
+    socket.on('message', () => {
+        io.emit('message', [{ username, message: 'todo' }]);
+    })
+});
 
 const port = process.env.PORT || 3000;
 

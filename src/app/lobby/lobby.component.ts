@@ -30,7 +30,7 @@ export class LobbyComponent implements OnInit {
   }
 
   onJoinClick(roomName) {
-    console.log(roomName);
+    
   }
 
   onLoginClick() {
