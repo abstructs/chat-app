@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { MatButtonModule, MatToolbarModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSnackBarModule } from '@angular/material';
+import { MatButtonModule, MatToolbarModule, MatDialogModule, MatFormFieldModule, MatInputModule, MatSnackBarModule, MatCardModule, MatListModule } from '@angular/material';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -12,13 +12,18 @@ import { HttpClientModule } from '@angular/common/http';
 import { CookieService } from 'ngx-cookie-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { SignUpDialogComponent } from './sign-up-dialog/sign-up-dialog.component';
+import { RoomDialogComponent } from './room-dialog/room-dialog.component';
+import { RoomService } from './services/room.service';
+import { ChatComponent } from './chat/chat.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LobbyComponent,
     LoginDialogComponent,
-    SignUpDialogComponent
+    SignUpDialogComponent,
+    RoomDialogComponent,
+    ChatComponent
   ],
   imports: [
     BrowserModule,
@@ -31,13 +36,16 @@ import { SignUpDialogComponent } from './sign-up-dialog/sign-up-dialog.component
     ReactiveFormsModule,
     HttpClientModule,
     BrowserAnimationsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule,
+    MatListModule
   ],
-  providers: [UserService, CookieService],
+  providers: [UserService, CookieService, RoomService],
   bootstrap: [AppComponent],
   entryComponents: [
     LoginDialogComponent,
-    SignUpDialogComponent
+    SignUpDialogComponent,
+    RoomDialogComponent
   ]
 })
 export class AppModule { }

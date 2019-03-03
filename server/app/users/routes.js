@@ -51,7 +51,7 @@ router.post('/signup', validUsername, (req, res) => {
                 password: hash
             });
         
-            user.save(err => {
+            user.save((user, err) => {
                 if(err) {
                     console.trace(err);
                     res.status(400).send({ errors: { user: "Couldn't save user." }});
@@ -60,7 +60,7 @@ router.post('/signup', validUsername, (req, res) => {
 
                 const cert = fs.readFileSync(path.resolve(__dirname) + '/../../private.key');
         
-                const token = jwt.sign({ username }, cert);
+                const token = jwt.sign({ id: user._id }, cert);
 
                 res.status(200).send({ success: "User was saved.", auth: { token } });
             });
@@ -87,8 +87,9 @@ router.post('/login', (req, res) => {
 
         bcrypt.compare(password, user.password, (err, isValid) => {
             if(isValid) {
+                
                 const cert = fs.readFileSync(path.resolve(__dirname) + '/../../private.key');
-                const token = jwt.sign({ username }, cert);
+                const token = jwt.sign({ id: user._id }, cert);
                 
                 res.status(200).send({ success: "Valid user.", auth: { token } });
                 return;

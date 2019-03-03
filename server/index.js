@@ -11,6 +11,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use('/user', require('./app/users/routes'));
+app.use('/room', require('./app/rooms/routes'));
 
 // app.use("/", express.static(__dirname + "/../dist/game-lobby"));
 

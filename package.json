@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "server": "node ./server/index.js"
+    "server": "nodemon ./server/index.js"
   },
   "private": true,
   "dependencies": {
@@ -23,6 +23,7 @@
     "@angular/platform-browser": "~7.0.0",
     "@angular/platform-browser-dynamic": "~7.0.0",
     "@angular/router": "~7.0.0",
+    "@types/socket.io-client": "^1.4.32",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.18.3",
     "core-js": "^2.5.4",
@@ -34,6 +35,8 @@
     "mongoose": "^5.4.13",
     "ngx-cookie-service": "^2.1.0",
     "rxjs": "~6.3.3",
+    "socket.io": "^2.2.0",
+    "socket.io-client": "^2.2.0",
     "zone.js": "~0.8.26"
   },
   "devDependencies": {

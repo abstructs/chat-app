@@ -7,4 +7,13 @@
   <button (click)="onLogoutClick()"*ngIf="isLoggedIn()" mat-button>Logout</button>
 </mat-toolbar>
 
+<mat-list *ngFor="let room of rooms">
+  <mat-list-item>
+    {{ room.name }}
+    <span class="fill-remaining-space"></span>
+    <button mat-button (click)="onJoinClick(room.name)">Join</button>
+  </mat-list-item>
+  
+</mat-list>
+
 <router-outlet></router-outlet>

@@ -5,8 +5,6 @@ import { HelperService } from './helper.service';
 import { HttpHeaders } from '@angular/common/http';
 import { api_url } from './helper.service';
 
-// import { Game } from './game.service';
-
 @Injectable({
   providedIn: 'root'
 })
@@ -23,6 +21,28 @@ export class BackendService {
         'Authorization': `Bearer ${this.helperService.getToken()}`
       })
     }
+  }
+
+  // room 
+
+  validRoomName(name: string): Observable<Object> {
+    return this.http.post(`${this.api_url}/room/valid-name`, {
+      room: {
+        name
+      }
+    }, this.httpOptions);
+  }
+
+  findAllRooms(): Observable<Object> {
+    return this.http.get(`${this.api_url}/room`, this.httpOptions);
+  }
+
+  createRoom(name: string): Observable<Object> {
+    return this.http.post(`${this.api_url}/room`, {
+      room: {
+        name
+      }
+    }, this.httpOptions);
   }
 
   // user
