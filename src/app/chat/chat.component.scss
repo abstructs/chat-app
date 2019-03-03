@@ -1,3 +1,17 @@
 .fill-remaining-space {
     flex: 1 1 auto;
 }
+
+.chat-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 500px;
+}
+
+.chat-container > * {
+    width: 100%;
+}
+
+.message-input {
+    margin-top: auto;
+}

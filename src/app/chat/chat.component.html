@@ -5,3 +5,11 @@
     <button (click)="onSignUpClick()" mat-button *ngIf="!isLoggedIn()">Sign Up</button>
     <button (click)="onLogoutClick()"*ngIf="isLoggedIn()" mat-button>Logout</button>
 </mat-toolbar>
+
+<div [formGroup]="messageForm" class="chat-container">
+    <mat-form-field class="message-input">
+        <input [type]="text" matInput formControlName="message" placeholder="Type your message...">
+        <mat-error *ngIf="message.invalid && (message.dirty || message.touched)">Invalid message</mat-error>
+    </mat-form-field>
+    <button (click)="sendMessage()" mat-button color="primary">Send</button>
+</div>

@@ -2,7 +2,7 @@ const express = require('express');
 const Room = require('./schema');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
-const bcrypt = require('bcrypt');
+
 const path = require('path');
 
 const saltRounds = 10;

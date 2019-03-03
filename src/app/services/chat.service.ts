@@ -3,28 +3,53 @@ import { BackendService } from './backend.service';
 import { HelperService } from './helper.service';
 
 import * as io from 'socket.io-client';
+import { UserService } from './user.service';
+
+export enum MessageType {
+  join, disconnect, message
+}
+
+export interface ChatMessage {
+  username: String;
+  message: String;
+  type: MessageType;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class ChatService {
 
+  socket: SocketIOClient.Socket;
+
   constructor(private backend: BackendService, 
     private helperService: HelperService) { }
 
-  connect(room, username) {
-    const socket = io.connect(`http://localhost:3100`, { query: { username, room }});
+  connect(room, onMessage: (message: ChatMessage) => void) {
+    const token = this.helperService.getToken();
 
-    console.log('connect called');
+    this.socket = io.connect(`http://localhost:3100`, { query: { token, room }});
 
-    socket.on('somone joined', (data) => {
-      console.log(data);
-      console.log('someone joined');
+    this.socket.on('join', (data) => {
+      const message: ChatMessage = data;
+
+      onMessage(message);
     });
 
-    socket.on('someone left', (data) => {
-      console.log(data);
-      console.log('someone left');
+    this.socket.on('disconnect', (data) => {
+      const message: ChatMessage = data;
+
+      onMessage(message);
     });
+
+    this.socket.on('message', (data) => {
+      const message: ChatMessage = data;
+
+      onMessage(message);
+    })
+  }
+
+  message(message) {
+    this.socket.emit('message', { message });
   }
 }

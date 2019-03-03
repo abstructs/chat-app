@@ -3,26 +3,51 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 
+const fs = require('fs');
+const path = require('path');   
+const jwt = require('jsonwebtoken');
+
+
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 server.listen(3100);
 
+const getChatUsername = (token) => {
+    const cert = fs.readFileSync(path.resolve(__dirname) + '/private.key');
+
+    try {
+        const decoded = jwt.verify(token, cert);
+
+        return decoded.username;        
+    } catch(err) {
+        return "Anonymous";
+    }
+}
+
 io.on('connection', (socket) => {
     const roomName = socket.handshake.query.room;
-    const username = socket.handshake.query.username;
+    const token = socket.handshake.query.token;
+
+    const username = getChatUsername(token);
 
     socket.join(roomName);
 
-    io.emit('somone joined', { username }).to(roomName);
+    const joinMessage = `${username} has joined the room`;
+
+    io.emit('join', { username, message: joinMessage, type: 'join' }).to(roomName);
 
     socket.on('disconnect', () => {
-        io.emit('someone left', [{ username }]).to(roomName);
+        const message = `${username} has left the room`;
+
+        io.emit('disconnect', { username, message, type: 'disconnect' }).to(roomName);
     });
 
-    socket.on('message', () => {
-        io.emit('message', [{ username, message: 'todo' }]);
+    socket.on('message', (data) => {
+        const message = data.message;
+
+        io.emit('message', { username, message, type: 'message' }).to(roomName);
     })
 });
 
