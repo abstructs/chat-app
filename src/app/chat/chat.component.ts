@@ -5,7 +5,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { SignUpDialogComponent } from '../sign-up-dialog/sign-up-dialog.component';
 import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { ActivatedRoute } from '@angular/router';
-import { ChatService, ChatMessage } from '../services/chat.service';
+import { ChatService, ChatMessage, MessageType } from '../services/chat.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
 @Component({
@@ -18,12 +18,15 @@ export class ChatComponent implements OnInit {
 
   messageForm: FormGroup;
   roomName: String;
-  messages: String[];
+  chatMessages: ChatMessage[];
 
   get message() {
     return this.messageForm.get('message');
   }
 
+  get messages() {
+    return this.chatMessages;
+  }
 
   constructor(public dialog: MatDialog, private userService: UserService, private roomService: RoomService, 
     private route: ActivatedRoute, private chatService: ChatService, private snackBar: MatSnackBar) { 
@@ -34,16 +37,22 @@ export class ChatComponent implements OnInit {
       });
 
       this.roomName = this.route.snapshot.paramMap.get("room");
-      
-      chatService.connect(this.roomName, this.onMessage);
+
+      this.chatService.connect(this.roomName, (message) => this.onMessage(message));
+  }
+
+  isMessage(message: ChatMessage) {
+    return message.type == MessageType.message;
   }
 
   ngOnInit() {
-    
+    this.chatMessages = [];
   }
 
   onMessage(message: ChatMessage) {
-    console.log(message);
+    
+    this.chatMessages.push(message);
+    console.log(this.chatMessages)  
   }
 
   sendMessage() {
@@ -52,11 +61,13 @@ export class ChatComponent implements OnInit {
       
       this.chatService.message(message);
 
+      this.messageForm.reset();
+      this.messageForm.markAsUntouched();
+
     } else {
       this.snackBar.open("Please check the form for errors", "CLOSE");
+      this.setFormTouched(this.messageForm);
     }
-
-    this.setFormTouched(this.messageForm);
   }
 
   setFormTouched(formGroup: FormGroup): void {

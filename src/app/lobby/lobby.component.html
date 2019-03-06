@@ -7,13 +7,14 @@
   <button (click)="onLogoutClick()"*ngIf="isLoggedIn()" mat-button>Logout</button>
 </mat-toolbar>
 
-<mat-list *ngFor="let room of rooms">
-  <mat-list-item>
-    {{ room.name }}
-    <span class="fill-remaining-space"></span>
-    <button mat-button routerLink="/chat/{{room.name}}">Join</button>
-  </mat-list-item>
-  
-</mat-list>
+<mat-card class="lobby-container">
+  <mat-list style="overflow: auto">
+    <mat-list-item *ngFor="let room of rooms">
+      {{ room.name }}
+      <span class="fill-remaining-space"></span>
+      <button mat-button routerLink="/chat/{{room.name}}">Join</button>
+    </mat-list-item>
+  </mat-list>
+</mat-card>
 
 <router-outlet></router-outlet>

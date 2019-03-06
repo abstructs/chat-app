@@ -1,15 +1,30 @@
 <mat-toolbar color="primary">
     <span>Chat App</span>
     <span class="fill-remaining-space"></span>
+    <button mat-button routerLink="/">Home</button>
     <button (click)="onLoginClick()" mat-button *ngIf="!isLoggedIn()">Login</button>
     <button (click)="onSignUpClick()" mat-button *ngIf="!isLoggedIn()">Sign Up</button>
     <button (click)="onLogoutClick()"*ngIf="isLoggedIn()" mat-button>Logout</button>
 </mat-toolbar>
 
-<div [formGroup]="messageForm" class="chat-container">
-    <mat-form-field class="message-input">
-        <input [type]="text" matInput formControlName="message" placeholder="Type your message...">
-        <mat-error *ngIf="message.invalid && (message.dirty || message.touched)">Invalid message</mat-error>
-    </mat-form-field>
-    <button (click)="sendMessage()" mat-button color="primary">Send</button>
+<mat-card class="chat-container">
+  <mat-list style="overflow: auto">
+    <mat-list-item *ngFor="let m of chatMessages">
+      <div class="text-center" *ngIf="!isMessage(m)">
+        {{ m.message }}
+      </div>
+      <div *ngIf="isMessage(m)">
+          {{ m.username }}: {{ m.message }}
+      </div>
+      <!-- <span class="fill-remaining-space"></span> -->
+    </mat-list-item>
+      
+  </mat-list>
+</mat-card>
+<div [formGroup]="messageForm" class="message-container">
+  <mat-form-field class="message-input">
+      <input [type]="text" matInput formControlName="message" placeholder="Type your message...">
+      <mat-error *ngIf="message.invalid && (message.dirty || message.touched)">Invalid message</mat-error>
+  </mat-form-field>
+  <button (click)="sendMessage()" mat-button color="primary">Send</button>
 </div>

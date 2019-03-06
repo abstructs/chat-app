@@ -29,10 +29,6 @@ export class LobbyComponent implements OnInit {
     });
   }
 
-  onJoinClick(roomName) {
-    
-  }
-
   onLoginClick() {
     this.openLoginDialog();
   }

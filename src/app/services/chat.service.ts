@@ -3,7 +3,6 @@ import { BackendService } from './backend.service';
 import { HelperService } from './helper.service';
 
 import * as io from 'socket.io-client';
-import { UserService } from './user.service';
 
 export enum MessageType {
   join, disconnect, message
@@ -25,25 +24,36 @@ export class ChatService {
   constructor(private backend: BackendService, 
     private helperService: HelperService) { }
 
-  connect(room, onMessage: (message: ChatMessage) => void) {
+  connect(room: String, onMessage: (message: ChatMessage) => void) {
+    console.log("connect called");
     const token = this.helperService.getToken();
 
-    this.socket = io.connect(`http://localhost:3100`, { query: { token, room }});
+    this.socket = io.connect(`http://localhost:3100`, { query: { token, room }, forceNew: true });
 
     this.socket.on('join', (data) => {
       const message: ChatMessage = data;
 
+      console.log('join');
+
+      message.type = MessageType.join;
+
       onMessage(message);
     });
 
-    this.socket.on('disconnect', (data) => {
+    this.socket.on('left', (data) => {
       const message: ChatMessage = data;
 
-      onMessage(message);
+      if(typeof(message) != 'string') {
+        message.type = MessageType.disconnect;
+
+        onMessage(message);
+      }
     });
 
     this.socket.on('message', (data) => {
       const message: ChatMessage = data;
+
+      message.type = MessageType.message;
 
       onMessage(message);
     })

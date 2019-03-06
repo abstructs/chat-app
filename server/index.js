@@ -12,6 +12,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+
 server.listen(3100);
 
 const getChatUsername = (token) => {
@@ -32,22 +33,24 @@ io.on('connection', (socket) => {
 
     const username = getChatUsername(token);
 
+    console.log(socket.handshake);
+
     socket.join(roomName);
 
     const joinMessage = `${username} has joined the room`;
 
-    io.emit('join', { username, message: joinMessage, type: 'join' }).to(roomName);
+    io.in(roomName).emit('join', { username, message: joinMessage, type: 'join' });
 
     socket.on('disconnect', () => {
         const message = `${username} has left the room`;
 
-        io.emit('disconnect', { username, message, type: 'disconnect' }).to(roomName);
+        io.in(roomName).emit('left', { username, message, type: 'disconnect' });
     });
 
     socket.on('message', (data) => {
         const message = data.message;
 
-        io.emit('message', { username, message, type: 'message' }).to(roomName);
+        io.to(roomName).emit('message', { username, message, type: 'message' });
     })
 });
 
