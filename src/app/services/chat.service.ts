@@ -55,7 +55,7 @@ export class ChatService {
       message.type = MessageType.message;
 
       onMessage(message);
-    })
+    });
   }
 
   message(message) {

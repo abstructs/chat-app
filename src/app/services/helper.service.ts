@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 export const api_url = 'http://localhost:3000';
+export const client_url = 'http://localhost:4200';
 
 @Injectable({
   providedIn: 'root'
@@ -15,12 +16,15 @@ export class HelperService {
   }
 
   setToken(token: string) {
-    this.cookieService.set('token', token);
+    const future = new Date();
+    future.setDate(future.getDate() + 30);
+
+    this.cookieService.set('token', token, future, '/');
     location.reload();
   }
 
   revokeToken() {
-    this.cookieService.delete('token');
+    this.cookieService.delete('token', '/');
     location.reload();
   }
 
