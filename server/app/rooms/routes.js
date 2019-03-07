@@ -3,9 +3,16 @@ const Room = require('./schema');
 const jwt = require('jsonwebtoken');
 const fs = require('fs');
 
+const io = require('../../index.js');
+
 const path = require('path');
 
-const saltRounds = 10;
+// socket.io.on('connection', (socket) => {
+//     console.log(socket);
+//     console.log('room connected');
+// });
+
+// const saltRounds = 10;
 
 const router = express.Router();
 
@@ -54,9 +61,9 @@ const validRoomName = (req, res, next) => {
 }
 
 router.post('/', validRoomName, authorizeUser, (req, res) => {
-    console.log(req.body)
-    console.log(req.body.room)
-    console.log(res.locals)
+    // console.log(req.body)
+    // console.log(req.body.room)
+    // console.log(res.locals)
     if(req.body.room) {
         const room = new Room({...req.body.room,
             });
@@ -68,7 +75,7 @@ router.post('/', validRoomName, authorizeUser, (req, res) => {
         // consume user id
         res.locals.user_id = undefined;
 
-        console.log("hi")
+        // console.log("hi")
 
         room.save(err => {
             if(err) {
@@ -76,15 +83,14 @@ router.post('/', validRoomName, authorizeUser, (req, res) => {
                 throw err;
             }
 
-            console.log("wtf")
+            // console.log("wtf")
     
             res.status(200).send({ success: "Successfully added room.", room });
         });
     } else {
-        console.log(req.body);
+        // console.log(req.body);
         res.status(400).send({ errors: { room: "Expected a room." }});
     }
-
 });
  
 router.get('/', (req, res) => {
@@ -98,21 +104,8 @@ router.get('/', (req, res) => {
     });
 });
 
-
 router.post('/valid-name', validRoomName, (req, res) => {
     res.status(200).send({ success: "Availible room name." });
-});
-
-router.delete('/delete/:id', authorizeUser, (req, res) => {
-    const roomId = req.params.id;
-    Room.findOneAndDelete({ _id: roomId }, (err, response) => {
-        if(err) {
-            console.trace(err);
-            throw err;
-        }
-
-        res.status(200).send({ success: "Successfully deleted room." });
-    });
 });
 
 module.exports = router;

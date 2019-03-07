@@ -1,4 +1,5 @@
 require('dotenv').config();
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,6 +13,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
+const Log = require('./logSchema');
 
 server.listen(3100);
 
@@ -33,16 +35,18 @@ io.on('connection', (socket) => {
 
     const username = getChatUsername(token);
 
-    console.log(socket.handshake);
-
     socket.join(roomName);
 
     const joinMessage = `${username} has joined the room`;
+
+    Log.create({ username, event: 'join', message: joinMessage, roomName });
 
     io.in(roomName).emit('join', { username, message: joinMessage, type: 'join' });
 
     socket.on('disconnect', () => {
         const message = `${username} has left the room`;
+
+        Log.create({ username, event: 'disconnect', message, roomName });
 
         io.in(roomName).emit('left', { username, message, type: 'disconnect' });
     });
@@ -50,8 +54,10 @@ io.on('connection', (socket) => {
     socket.on('message', (data) => {
         const message = data.message;
 
+        Log.create({ username, event: 'message', message, roomName });
+
         io.to(roomName).emit('message', { username, message, type: 'message' });
-    })
+    });
 });
 
 const port = process.env.PORT || 3000;
@@ -62,10 +68,21 @@ app.use(bodyParser.json());
 app.use('/user', require('./app/users/routes'));
 app.use('/room', require('./app/rooms/routes'));
 
-// app.use("/", express.static(__dirname + "/../dist/game-lobby"));
+app.get('/api/history', (req, res) => {
+    Log.find({}, (err, logs) => {
+        if(err) {
+            console.error(err);
+            res.status(400).end();
+        } else {
+            res.status(200).json(logs).end();
+        }
+    });
+});
 
-// app.get('/', (req, res) => {
-//     res.sendFile("index.html", { root: __dirname + "/../dist/game-lobby" });
-// });
+app.use("/", express.static(__dirname + "/../dist/chat-app"));
 
-app.listen(port, () => console.log(`Now listening on port ${port}\n Go to localhost:${port} on your browser to view the app.`));
+app.get('/', (req, res) => {
+    res.sendFile("index.html", { root: __dirname + "/../dist/chat-app" });
+});
+
+app.listen(port, () => console.log(`Now listening on port ${port}\n Go to domain:${port} on your browser to view the app.`));

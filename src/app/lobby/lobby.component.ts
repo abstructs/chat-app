@@ -52,6 +52,10 @@ export class LobbyComponent implements OnInit {
   openCreateRoomDialog() {
     const dialogRef = this.dialog.open(RoomDialogComponent, {
       width: "60%"
+    }).afterClosed().subscribe(created => {
+      if(created) {
+        this.getRooms();
+      }
     });
   }
 

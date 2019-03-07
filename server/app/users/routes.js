@@ -36,13 +36,13 @@ router.post('/signup', validUsername, (req, res) => {
 
     bcrypt.genSalt(saltRounds, (err, salt) => {
         if(err) {
-            console.trace(err);
-            throw err
+            console.error(err);
+            throw err;
         }
 
         bcrypt.hash(password, salt, (err, hash) => {
             if(err) {
-                console.trace(err);
+                console.error(err);
                 throw err
             }
 
@@ -51,7 +51,7 @@ router.post('/signup', validUsername, (req, res) => {
                 password: hash
             });
         
-            user.save((user, err) => {
+            user.save((err, user) => {
                 if(err) {
                     console.trace(err);
                     res.status(400).send({ errors: { user: "Couldn't save user." }});

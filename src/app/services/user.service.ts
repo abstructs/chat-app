@@ -39,6 +39,8 @@ export class UserService {
       map(res => {
         const { token } = res['auth'];
 
+        console.log(token);
+
         this.helperService.setToken(token);
         return true;
       }),
