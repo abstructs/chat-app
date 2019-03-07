@@ -3,6 +3,8 @@ import { BackendService } from './backend.service';
 import { HelperService } from './helper.service';
 
 import * as io from 'socket.io-client';
+import { map, catchError } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 
 export enum MessageType {
   join, disconnect, message
@@ -25,15 +27,12 @@ export class ChatService {
     private helperService: HelperService) { }
 
   connect(room: String, onMessage: (message: ChatMessage) => void) {
-    console.log("connect called");
     const token = this.helperService.getToken();
 
     this.socket = io.connect(`http://localhost:3100`, { query: { token, room }, forceNew: true });
 
     this.socket.on('join', (data) => {
       const message: ChatMessage = data;
-
-      console.log('join');
 
       message.type = MessageType.join;
 
@@ -61,5 +60,18 @@ export class ChatService {
 
   message(message) {
     this.socket.emit('message', { message });
+  }
+
+  viewConnected(roomName): Observable<String[]> {
+    return this.backend.getConnected(roomName).pipe(
+      map(res => {
+        const usernames = res['usernames'];
+        
+        return usernames;
+      }),
+      catchError(err => {
+        return of([]);
+      })
+    );
   }
 }

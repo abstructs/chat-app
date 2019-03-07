@@ -30,7 +30,7 @@ export class RoomDialogComponent implements OnInit {
     return this.roomForm.get('name');
   }
 
-  constructor(public dialogRef:  MatDialogRef<RoomDialogComponent>, 
+  constructor(public dialogRef: MatDialogRef<RoomDialogComponent>, 
     private uniqueFormNameValidator: UniqueRoomNameValidator,
     private roomService: RoomService,
     public snackBar: MatSnackBar) {

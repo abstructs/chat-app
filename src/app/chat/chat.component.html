@@ -8,6 +8,9 @@
 </mat-toolbar>
 
 <mat-card class="chat-container">
+  <div>
+    <button (click)="onViewConnectedClick()" mat-button>View Connected</button>
+  </div>
   <mat-list style="overflow: auto">
     <mat-list-item *ngFor="let m of chatMessages">
       <div class="text-center" *ngIf="!isMessage(m)">

@@ -37,6 +37,8 @@ io.on('connection', (socket) => {
 
     socket.join(roomName);
 
+    socket.username = username;
+
     const joinMessage = `${username} has joined the room`;
 
     Log.create({ username, event: 'join', message: joinMessage, roomName });
@@ -68,13 +70,33 @@ app.use(bodyParser.json());
 app.use('/user', require('./app/users/routes'));
 app.use('/room', require('./app/rooms/routes'));
 
+app.get('/chat/users/:roomName', (req, res) => {
+    const roomName = req.params.roomName;
+
+    const room = io.sockets.adapter.rooms[roomName];
+
+    if(room) {
+        const clients = room.sockets;
+
+        const usernames = Object.keys(clients).map(clientId => {
+            const clientSocket = io.sockets.connected[clientId];
+    
+            return clientSocket.username;
+        });
+    
+        res.status(200).json({ usernames }).end();
+    } else {
+        res.sendStatus(404).end();
+    }
+});
+
 app.get('/api/history', (req, res) => {
     Log.find({}, (err, logs) => {
         if(err) {
             console.error(err);
-            res.status(400).end();
+            res.sendStatus(400).end();
         } else {
-            res.status(200).json(logs).end();
+            res.json(logs).sendStatus(200).end();
         }
     });
 });

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, ObservableLike } from 'rxjs';
 import { HelperService } from './helper.service';
 import { HttpHeaders } from '@angular/common/http';
 import { api_url } from './helper.service';
@@ -71,6 +71,12 @@ export class BackendService {
         username
       }
     });
+  }
+
+  // chat
+
+  getConnected(roomName: String): Observable<Object> {
+    return this.http.get(`${this.api_url}/chat/users/${roomName}`);
   }
   
 }

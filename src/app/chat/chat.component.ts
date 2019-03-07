@@ -7,6 +7,7 @@ import { LoginDialogComponent } from '../login-dialog/login-dialog.component';
 import { ActivatedRoute } from '@angular/router';
 import { ChatService, ChatMessage, MessageType } from '../services/chat.service';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { ListDialogComponent } from '../list-dialog/list-dialog.component';
 
 @Component({
   selector: 'app-chat',
@@ -106,5 +107,16 @@ export class ChatComponent implements OnInit {
 
   onLogoutClick(): void {
     this.userService.logout();
+  }
+
+  onViewConnectedClick() {
+    this.chatService.viewConnected(this.roomName).subscribe(usernames => {
+      const dialogRef = this.dialog.open(ListDialogComponent, {
+        width: "60%",
+        data: {
+          list: usernames
+        }
+      });
+    });
   }
 }

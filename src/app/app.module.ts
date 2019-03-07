@@ -16,6 +16,7 @@ import { RoomDialogComponent } from './room-dialog/room-dialog.component';
 import { RoomService } from './services/room.service';
 import { ChatComponent } from './chat/chat.component';
 import { RouterModule } from '@angular/router';
+import { ListDialogComponent } from './list-dialog/list-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,8 @@ import { RouterModule } from '@angular/router';
     LoginDialogComponent,
     SignUpDialogComponent,
     RoomDialogComponent,
-    ChatComponent
+    ChatComponent,
+    ListDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -47,7 +49,8 @@ import { RouterModule } from '@angular/router';
   entryComponents: [
     LoginDialogComponent,
     SignUpDialogComponent,
-    RoomDialogComponent
+    RoomDialogComponent,
+    ListDialogComponent
   ]
 })
 export class AppModule { }
