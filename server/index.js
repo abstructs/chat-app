@@ -102,11 +102,41 @@ app.get('/api/history', (req, res) => {
     Log.find({}, (err, logs) => {
         if(err) {
             console.error(err);
-            res.sendStatus(400).end();
+            res.sendStatus(400);
         } else {
-            res.json(logs).sendStatus(200).end();
+            res.status(200).json(logs);
         }
-    });
+    }).select('-_id username message roomName');
+});
+
+app.post('/api/roomhistory', (req, res) => {
+    console.log(req.body);
+    const roomName = req.body['roomname'];
+
+    if(!roomName) {
+        res.status(400).send("Expected param 'roomname'");
+        return;
+    }
+
+    Log.find({ roomName }, (err, logs) => {
+        if(err) {
+            console.error(err);
+            res.status(500).end();
+        } else {
+            res.status(200).json(logs);
+        }
+    }).select('-_id username message');
+});
+
+app.get('/api/eventlog', (req, res) => {
+    Log.find({}, (err, logs) => {
+        if(err) {
+            console.error(err);
+            res.status(500).end();
+        } else {
+            res.status(200).json(logs);
+        }
+    }).select('-_id event roomName username');
 });
 
 app.use("/", express.static(__dirname + "/../dist/chat-app"));

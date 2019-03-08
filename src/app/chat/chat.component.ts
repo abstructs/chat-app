@@ -42,6 +42,7 @@ export class ChatComponent implements OnInit {
       this.roomService.exists(this.roomName).subscribe(exists => {
         if(exists) {
           this.chatService.connect(this.roomName, (message) => this.onMessage(message));
+          this.snackBar.open(`Joined "${this.roomName}"`, "OK");
         } else {
           this.snackBar.open("Room doesn't exist", "OK");
         }
