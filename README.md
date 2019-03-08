@@ -1,27 +1,39 @@
 # ChatApp
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 7.0.5.
+This project was created for [COMP3133](https://github.com/georgebrowntech).
 
-## Development server
+## Creating the .env
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
+Run `touch .env`
 
-## Code scaffolding
+Then `echo "PORT=3000" > .env`
+Then `echo "DB_URL='mongodb://localhost:27017/chat-app'" >> .env`
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Creating secret key for passwords
 
-## Build
+To create a secret for passwords:
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
+Run `touch server/private.key`
 
-## Running unit tests
+Then run `echo "YOUR_SECRET" > server/private.key`
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Start mongodb
 
-## Running end-to-end tests
+If running locally, make sure you have mongodb installed.
 
-Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protractortest.org/).
+Run `mongod` in a seperate terminal.
 
-## Further help
+If running off a database host change the url in the .env file to the connection string for
+your database.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+## Run the project
+
+This project compiles with the Angular CLI and runs on port 3000.
+
+Run `npm install`.
+
+Then run `npm run build`
+
+Finally run `npm run start`
+
+The project should be on `http://localhost:3000`

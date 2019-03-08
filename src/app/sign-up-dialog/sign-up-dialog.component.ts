@@ -49,13 +49,17 @@ export class SignUpDialogComponent implements OnInit {
 
     this.signUpForm = new FormGroup({
       username: new FormControl('', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(15)
       ], [
         // loses context without arrow function (this becomes undefined), can also bind context to validate
         (ctrl: AbstractControl) => this.uniqueUsernameValidator.validate(ctrl)
       ]),
       password: new FormControl('', [
-        Validators.required
+        Validators.required,
+        Validators.minLength(3),
+        Validators.maxLength(20)
       ])
     });
   }
