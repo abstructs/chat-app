@@ -43,6 +43,6 @@ The project should be on `http://localhost:PORT`
 
 If you want to run this on Heroku or your own server there's one file you have to change.
 
-On `./src/services/helper.service.ts` change the constant "api_url" to your domain address.
+On `./src/app/services/helper.service.ts` change the constant "api_url" to your domain address.
 
 Also make sure web sockets are enabled.
