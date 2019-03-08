@@ -1,6 +1,7 @@
 # ChatApp
 
 This project was created for [COMP3133](https://github.com/georgebrowntech).
+This app is currently running on [Heroku](http://chat-app-fs.herokuapp.com).
 
 ## Creating the .env
 
@@ -30,10 +31,18 @@ your database.
 
 This project compiles with the Angular CLI and runs on port 3000 by default (this can be changed through the .env file).
 
-Run `npm install`.
+Run `npm install`
 
 Then run `npm run build`
 
 Finally run `npm run start`
 
 The project should be on `http://localhost:PORT`
+
+## Deploying to your own server
+
+If you want to run this on Heroku or your own server there's one file you have to change.
+
+On `./src/services/helper.service.ts` change the constant "api_url" to your domain address.
+
+Also make sure web sockets are enabled.
