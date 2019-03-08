@@ -15,7 +15,7 @@ const io = require('socket.io')(server);
 const Log = require('./logSchema');
 const Room = require('./app/rooms/schema');
 
-server.listen(3100);
+// server.listen(3100);
 
 const getChatUsername = (token) => {
     const cert = fs.readFileSync(path.resolve(__dirname) + '/private.key');
@@ -111,8 +111,8 @@ app.get('/api/history', (req, res) => {
 
 app.use("/", express.static(__dirname + "/../dist/chat-app"));
 
-app.get('/*', (req, res) => {
+app.get('*', (req, res) => {
     res.sendFile("index.html", { root: __dirname + "/../dist/chat-app" });
 });
 
-app.listen(port, () => console.log(`Now listening on port ${port}\n Go to domain:${port} on your browser to view the app.`));
+server.listen(port, () => console.log(`Now listening on port ${port}\n Go to domain:${port} on your browser to view the app.`));

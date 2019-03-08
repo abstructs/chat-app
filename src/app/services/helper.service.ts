@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { CookieService } from 'ngx-cookie-service';
 
 export const api_url = 'http://localhost:3000';
-export const client_url = 'http://localhost:4200';
 
 @Injectable({
   providedIn: 'root'
