@@ -33,6 +33,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.env
+./server/private.key
 
 # System Files
 .DS_Store
