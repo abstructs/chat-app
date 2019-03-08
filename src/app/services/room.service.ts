@@ -25,6 +25,12 @@ export class RoomService {
       )
     }
 
+    exists(roomName: string): Observable<Boolean> {
+      return this.backend.roomExists(roomName).pipe(
+        map(res => true), 
+        catchError(() => of(false)));
+    }
+
     validName(name: string): Observable<boolean> {
       return this.backend.validRoomName(name).pipe(
         map(() => false),

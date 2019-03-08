@@ -18,7 +18,7 @@ import { ListDialogComponent } from '../list-dialog/list-dialog.component';
 export class ChatComponent implements OnInit {
 
   messageForm: FormGroup;
-  roomName: String;
+  roomName: string;
   chatMessages: ChatMessage[];
 
   get message() {
@@ -39,7 +39,13 @@ export class ChatComponent implements OnInit {
 
       this.roomName = this.route.snapshot.paramMap.get("room");
 
-      this.chatService.connect(this.roomName, (message) => this.onMessage(message));
+      this.roomService.exists(this.roomName).subscribe(exists => {
+        if(exists) {
+          this.chatService.connect(this.roomName, (message) => this.onMessage(message));
+        } else {
+          this.snackBar.open("Room doesn't exist", "OK");
+        }
+      });
   }
 
   isMessage(message: ChatMessage) {
@@ -51,9 +57,7 @@ export class ChatComponent implements OnInit {
   }
 
   onMessage(message: ChatMessage) {
-    
     this.chatMessages.push(message);
-    console.log(this.chatMessages)  
   }
 
   sendMessage() {

@@ -61,9 +61,6 @@ const validRoomName = (req, res, next) => {
 }
 
 router.post('/', validRoomName, authorizeUser, (req, res) => {
-    // console.log(req.body)
-    // console.log(req.body.room)
-    // console.log(res.locals)
     if(req.body.room) {
         const room = new Room({...req.body.room,
             });
@@ -75,20 +72,15 @@ router.post('/', validRoomName, authorizeUser, (req, res) => {
         // consume user id
         res.locals.user_id = undefined;
 
-        // console.log("hi")
-
         room.save(err => {
             if(err) {
                 console.trace(err);
                 throw err;
             }
-
-            // console.log("wtf")
     
             res.status(200).send({ success: "Successfully added room.", room });
         });
     } else {
-        // console.log(req.body);
         res.status(400).send({ errors: { room: "Expected a room." }});
     }
 });
@@ -102,6 +94,20 @@ router.get('/', (req, res) => {
 
         res.status(200).send({ rooms });
     });
+});
+
+router.get('/exists/:name', (req, res) => {
+    const roomName = req.params.name;
+
+    Room.findOne({ name: roomName })
+        .exec()
+        .then(room => {
+            if(!room) {
+                res.status(404).end();
+            } else {
+                res.status(200).end();
+            }
+        });
 });
 
 router.post('/valid-name', validRoomName, (req, res) => {

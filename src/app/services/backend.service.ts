@@ -33,6 +33,10 @@ export class BackendService {
     }, this.httpOptions);
   }
 
+  roomExists(room: string): Observable<Object> {
+    return this.http.get(`${this.api_url}/room/exists/${room}`);
+  }
+
   findAllRooms(): Observable<Object> {
     return this.http.get(`${this.api_url}/room`, this.httpOptions);
   }

@@ -8,12 +8,12 @@ const fs = require('fs');
 const path = require('path');   
 const jwt = require('jsonwebtoken');
 
-
 const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
 const Log = require('./logSchema');
+const Room = require('./app/rooms/schema');
 
 server.listen(3100);
 
@@ -35,31 +35,39 @@ io.on('connection', (socket) => {
 
     const username = getChatUsername(token);
 
-    socket.join(roomName);
+    Room.findOne({ name: roomName }).exec()
+        .then((room) => {
+            if(!room) {
+                socket.disconnect();
+                return;
+            }
+       
+            socket.join(roomName);
 
-    socket.username = username;
-
-    const joinMessage = `${username} has joined the room`;
-
-    Log.create({ username, event: 'join', message: joinMessage, roomName });
-
-    io.in(roomName).emit('join', { username, message: joinMessage, type: 'join' });
-
-    socket.on('disconnect', () => {
-        const message = `${username} has left the room`;
-
-        Log.create({ username, event: 'disconnect', message, roomName });
-
-        io.in(roomName).emit('left', { username, message, type: 'disconnect' });
-    });
-
-    socket.on('message', (data) => {
-        const message = data.message;
-
-        Log.create({ username, event: 'message', message, roomName });
-
-        io.to(roomName).emit('message', { username, message, type: 'message' });
-    });
+            socket.username = username;
+        
+            const joinMessage = `${username} has joined the room`;
+        
+            Log.create({ username, event: 'join', message: joinMessage, roomName });
+        
+            io.in(roomName).emit('join', { username, message: joinMessage, type: 'join' });
+        
+            socket.on('disconnect', () => {
+                const message = `${username} has left the room`;
+        
+                Log.create({ username, event: 'disconnect', message, roomName });
+        
+                io.in(roomName).emit('left', { username, message, type: 'disconnect' });
+            });
+        
+            socket.on('message', (data) => {
+                const message = data.message;
+        
+                Log.create({ username, event: 'message', message, roomName });
+        
+                io.to(roomName).emit('message', { username, message, type: 'message' });
+            });
+        });
 });
 
 const port = process.env.PORT || 3000;
@@ -103,7 +111,7 @@ app.get('/api/history', (req, res) => {
 
 app.use("/", express.static(__dirname + "/../dist/chat-app"));
 
-app.get('/', (req, res) => {
+app.get('/*', (req, res) => {
     res.sendFile("index.html", { root: __dirname + "/../dist/chat-app" });
 });
 
