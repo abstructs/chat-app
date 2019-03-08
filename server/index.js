@@ -107,7 +107,7 @@ app.get('/api/history', (req, res) => {
         } else {
             res.status(200).json(logs);
         }
-    }).select('-_id username message roomName');
+    }).select('-_id username message roomName createdAt');
 });
 
 // Get a list Chat or Game History by Room Name
@@ -126,7 +126,7 @@ app.post('/api/roomhistory', (req, res) => {
         } else {
             res.status(200).json(logs);
         }
-    }).select('-_id username message');
+    }).select('-_id username message createdAt');
 });
 
 // Write a mongoose query to retrieve all event logs
@@ -139,9 +139,8 @@ app.get('/api/eventlog', (req, res) => {
         } else {
             res.status(200).json(logs);
         }
-    }).select('-_id event roomName username');
+    }).select('-_id event roomName username createdAt');
 });
-
 
 // Write a mongoose query to retrieve all user history
 app.get('/api/history/user/:username', (req, res) => {
@@ -154,7 +153,7 @@ app.get('/api/history/user/:username', (req, res) => {
         } else {
             res.status(200).json(logs);
         }
-    }).select("-_id username event message roomName");
+    }).select("-_id username event message roomName createdAt");
 });
 
 // Write a mongoose query to retrieve all user history by room name
@@ -169,7 +168,7 @@ app.get('/api/history/:roomName/:username', (req, res) => {
         } else {
             res.status(200).json(logs);
         }
-    }).select("-_id username event message");
+    }).select("-_id username event message createdAt");
 });
 
 app.use("/", express.static(__dirname + "/../dist/chat-app"));

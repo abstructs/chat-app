@@ -46,3 +46,23 @@ If you want to run this on Heroku or your own server there's one file you have t
 On `./src/app/services/helper.service.ts` change the constant "api_url" to your domain address.
 
 Also make sure web sockets are enabled.
+
+## Endpoints (Requirements)
+Please note usernames and roomnames are case sensitive.
+
+Queries are located in `server/index.js`
+
+GET: `/api/history`
+Gets all logs. Fields returned: `username, message, roomName, createdAt`
+
+POST: `/api/roomhistory`, PARAMS: roomname
+Gets all logs for a room. Fields returned: `username, message, createdAt`
+
+GET: `/api/eventlog`
+Gets all events. Fields returned: `event, roomName, username, createdAt`
+
+GET: `/api/history/user/:username`
+Gets all logs for a user. Fields returned: `username, event, message, roomName, createdAt`
+
+GET: `/api/history/:roomName/:username`
+Gets all logs for a user inside of a given room. Fields returned: `username, event, message, createdAt`
