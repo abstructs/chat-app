@@ -1,3 +1,6 @@
+// Build model and scheme to save socket.io events
+// Build model and schema to save user history 
+
 const mongoose = require('mongoose');
 
 const url = process.env.DB_URL;
@@ -25,5 +28,6 @@ const logSchema = new mongoose.Schema({
         required: true
     },
 }, { timestamps: true });
+
 
 module.exports = mongoose.model('Log', logSchema);

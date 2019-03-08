@@ -12,7 +12,7 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-const Log = require('./logSchema');
+const Log = require('./app/logs/schema');
 const Room = require('./app/rooms/schema');
 
 // server.listen(3100);
@@ -98,6 +98,7 @@ app.get('/chat/users/:roomName', (req, res) => {
     }
 });
 
+// Get a list of all Chat History
 app.get('/api/history', (req, res) => {
     Log.find({}, (err, logs) => {
         if(err) {
@@ -109,8 +110,8 @@ app.get('/api/history', (req, res) => {
     }).select('-_id username message roomName');
 });
 
+// Get a list Chat or Game History by Room Name
 app.post('/api/roomhistory', (req, res) => {
-    console.log(req.body);
     const roomName = req.body['roomname'];
 
     if(!roomName) {
@@ -128,6 +129,8 @@ app.post('/api/roomhistory', (req, res) => {
     }).select('-_id username message');
 });
 
+// Write a mongoose query to retrieve all event logs
+// Get a list of all Events
 app.get('/api/eventlog', (req, res) => {
     Log.find({}, (err, logs) => {
         if(err) {
@@ -137,6 +140,36 @@ app.get('/api/eventlog', (req, res) => {
             res.status(200).json(logs);
         }
     }).select('-_id event roomName username');
+});
+
+
+// Write a mongoose query to retrieve all user history
+app.get('/api/history/user/:username', (req, res) => {
+    const username = req.params.username;
+
+    Log.find({ username }, (err, logs) => {
+        if(err) {
+            console.error(err);
+            res.status(500).end();
+        } else {
+            res.status(200).json(logs);
+        }
+    }).select("-_id username event message roomName");
+});
+
+// Write a mongoose query to retrieve all user history by room name
+app.get('/api/history/:roomName/:username', (req, res) => {
+    const roomName = req.params.roomName;
+    const username = req.params.username;
+
+    Log.find({ username, roomName }, (err, logs) => {
+        if(err) {
+            console.error(err);
+            res.status(500).end();
+        } else {
+            res.status(200).json(logs);
+        }
+    }).select("-_id username event message");
 });
 
 app.use("/", express.static(__dirname + "/../dist/chat-app"));

@@ -26,7 +26,7 @@
 </mat-card>
 <div [formGroup]="messageForm" class="message-container">
   <mat-form-field class="message-input">
-      <input [type]="text" matInput formControlName="message" placeholder="Type your message...">
+      <input type="text" matInput formControlName="message" placeholder="Type your message...">
       <mat-error *ngIf="message.invalid && (message.dirty || message.touched)">Invalid message</mat-error>
   </mat-form-field>
   <button (click)="sendMessage()" mat-button color="primary">Send</button>

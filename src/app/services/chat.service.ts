@@ -29,7 +29,7 @@ export class ChatService {
   connect(room: String, onMessage: (message: ChatMessage) => void) {
     const token = this.helperService.getToken();
 
-    this.socket = io.connect('http://localhost:3000', { query: { token, room }, forceNew: true });
+    this.socket = io.connect({ query: { token, room }, forceNew: true });
 
     this.socket.on('join', (data) => {
       const message: ChatMessage = data;
